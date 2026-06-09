@@ -1,0 +1,52 @@
+import { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Toaster } from 'react-hot-toast';
+import Navbar from './components/Navbar';
+import Loader from './components/Loader';
+
+const ProductsPage = lazy(() => import('./pages/ProductsPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+
+function App() {
+  const darkMode = useSelector((state) => state.ui.darkMode);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  return (
+    <Router>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <Navbar />
+        <main>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<ProductsPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: darkMode ? '#1f2937' : '#ffffff',
+              color: darkMode ? '#f3f4f6' : '#111827',
+              border: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`,
+            },
+          }}
+        />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
