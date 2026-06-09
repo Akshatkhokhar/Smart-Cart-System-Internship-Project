@@ -33,85 +33,69 @@ function CartItem({ item }) {
   const neededForNextFree = remainder === 0 ? 0 : 3 - remainder;
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 animate-slide-up">
-      <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+    <div className="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 animate-fade-in">
+      <div className="flex-shrink-0 w-20 h-20 rounded overflow-hidden bg-white border border-gray-100 dark:border-gray-700">
         <img
           src={item.image}
           alt={item.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain p-2"
         />
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
               {item.name}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-              Unit Price: ₹{item.price.toLocaleString()}
+              ₹{item.price.toLocaleString()}
             </p>
           </div>
-          <div className="text-right flex-shrink-0 ml-2">
-            <p className="text-sm font-bold text-gray-900 dark:text-white">
-              ₹{totalPrice.toLocaleString()}
-            </p>
-            {item.quantity >= 5 && (
-              <Badge variant="warning" size="sm" className="mt-1">
-                Bulk Purchase
-              </Badge>
-            )}
-          </div>
+          <p className="text-sm font-bold text-gray-900 dark:text-white shrink-0">
+            ₹{totalPrice.toLocaleString()}
+          </p>
         </div>
 
         <div className="mt-2">
           {freeUnits > 0 ? (
             <Badge variant="success" size="sm">
-              🎉 {freeUnits} free{freeUnits > 1 ? ' items' : ' item'} with B2G1!
+              {freeUnits} free item{freeUnits > 1 ? 's' : ''} (B2G1)
             </Badge>
           ) : item.quantity >= 2 ? (
-            <Badge variant="info" size="sm">
-              Add {neededForNextFree} more → get 1 free!
+            <Badge variant="orange" size="sm">
+              Add {neededForNextFree} more → get 1 free
             </Badge>
           ) : null}
         </div>
 
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
+            <button
               onClick={handleDecrease}
               disabled={item.quantity <= 1}
-              className="!px-2 !py-1"
+              className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-40 transition-colors text-sm"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-              </svg>
-            </Button>
-            <span className="w-8 text-center font-medium text-gray-900 dark:text-white">
+              -
+            </button>
+            <span className="w-6 text-center text-sm font-medium text-gray-900 dark:text-white">
               {item.quantity}
             </span>
-            <Button
-              variant="secondary"
-              size="sm"
+            <button
               onClick={handleIncrease}
               disabled={item.quantity >= 10}
-              className="!px-2 !py-1"
+              className="w-7 h-7 flex items-center justify-center rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-40 transition-colors text-sm"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-            </Button>
+              +
+            </button>
           </div>
 
-          <Button
-            variant="danger"
-            size="sm"
+          <button
             onClick={handleRemove}
+            className="text-xs text-amazon-link hover:text-amazon-link-hover transition-colors"
           >
-            Remove
-          </Button>
+            Delete
+          </button>
         </div>
       </div>
     </div>
