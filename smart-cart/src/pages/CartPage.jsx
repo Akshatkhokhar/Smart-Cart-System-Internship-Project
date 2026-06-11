@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { selectCartItems } from '../redux/slices/cartSlice';
 import { calculateTotals } from '../utils/discounts';
+import { selectIsAuthenticated } from '../redux/slices/authSlice';
 import CartItem from '../components/CartItem';
 import Button from '../components/Button';
 
 function CartPage() {
   const cartItems = useSelector(selectCartItems);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const { subtotal, totalSavings, productDiscount, b2g1Discount } = useMemo(
     () => calculateTotals(cartItems, false),
@@ -52,9 +54,15 @@ function CartPage() {
               {itemCount} item{itemCount !== 1 ? 's' : ''}
             </p>
           </div>
-          <Link to="/checkout">
-            <Button variant="cta" size="md">Proceed to Checkout</Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/checkout">
+              <Button variant="cta" size="md">Proceed to Checkout</Button>
+            </Link>
+          ) : (
+            <Link to="/login" state={{ from: { pathname: '/checkout' } }}>
+              <Button variant="cta" size="md">Proceed to Checkout</Button>
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -97,9 +105,15 @@ function CartPage() {
               <hr className="border-gray-200 dark:border-gray-700" />
 
               <div className="flex flex-col gap-2">
-                <Link to="/checkout">
-                  <Button variant="cta" size="md" className="w-full">Proceed to Checkout</Button>
-                </Link>
+                {isAuthenticated ? (
+                  <Link to="/checkout">
+                    <Button variant="cta" size="md" className="w-full">Proceed to Checkout</Button>
+                  </Link>
+                ) : (
+                  <Link to="/login" state={{ from: { pathname: '/checkout' } }}>
+                    <Button variant="cta" size="md" className="w-full">Proceed to Checkout</Button>
+                  </Link>
+                )}
                 <Link to="/products">
                   <Button variant="secondary" size="sm" className="w-full">Continue Shopping</Button>
                 </Link>

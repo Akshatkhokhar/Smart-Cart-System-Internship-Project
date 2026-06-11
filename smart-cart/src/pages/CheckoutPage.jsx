@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { selectCartItems, clearCart } from '../redux/slices/cartSlice';
+import { selectIsAuthenticated } from '../redux/slices/authSlice';
 import CheckoutSummary from '../components/CheckoutSummary';
 import Button from '../components/Button';
 import toast from 'react-hot-toast';
@@ -10,6 +11,12 @@ function CheckoutPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(selectCartItems);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  if (!isAuthenticated) {
+    navigate('/login', { state: { from: { pathname: '/checkout' } }, replace: true });
+    return null;
+  }
 
   if (cartItems.length === 0) {
     return (
